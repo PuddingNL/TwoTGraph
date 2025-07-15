@@ -4,103 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wheel of Time Character Network</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 20px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-        }
-        
-        .container {
-            max-width: 80%;
-            margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-        
-        .header {
-            background: linear-gradient(45deg, #2c3e50, #34495e);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-        
-        .header h1 {
-            margin: 0;
-            font-size: 2.5em;
-            font-weight: 300;
-        }
-        
-        .header p {
-            margin: 10px 0 0 0;
-            opacity: 0.8;
-            font-size: 1.1em;
-        }
-        
-        #graph {
-            width: 100%;
-            height: 600px;
-            background: #fafafa;
-        }
-        
-        .controls {
-            padding: 20px;
-            background: #f8f9fa;
-            border-top: 1px solid #e9ecef;
-            text-align: center;
-        }
-        
-        .btn {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            margin: 0 10px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-        
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        
-        .legend {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(255,255,255,0.9);
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            font-size: 12px;
-        }
-        
-        .legend-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-        
-        .legend-color {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            margin-right: 8px;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>The Wheel of Time</h1>
-            <p>Character Visualization</p>
+            <h1>The Wheel of Time - Character Visualization</h1>
         </div>
         
         <div style="position: relative;">
@@ -115,18 +24,6 @@
                 <div class="legend-item">
                     <div class="legend-color" style="background: #4169E1;"></div>
                     <span>Blue Ajah</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background: #45b7d1;"></div>
-                    <span>Gleemen</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background: #2F4F4F;"></div>
-                    <span>Warders</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background: #bb8fce;"></div>
-                    <span>Aiel</span>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color" style="background: #8B4513;"></div>
@@ -145,6 +42,18 @@
                     <span>Amyrlin Seat</span>
                 </div>
                 <div class="legend-item">
+                    <div class="legend-color" style="background: #2F4F4F;"></div>
+                    <span>Warders</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #45b7d1;"></div>
+                    <span>Gleemen</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #bb8fce;"></div>
+                    <span>Aiel</span>
+                </div>
+                <div class="legend-item">
                     <div class="legend-color" style="background: #000000;"></div>
                     <span>Forsaken</span>
                 </div>
@@ -153,12 +62,6 @@
                     <span>Bela</span>
                 </div>
             </div>
-        </div>
-        
-        <div class="controls">
-            <button class="btn" onclick="restartSimulation()">Restart Animation</button>
-            <button class="btn" onclick="toggleNames()">Toggle Names</button>
-            <button class="btn" onclick="centerGraph()">Center Graph</button>
         </div>
     </div>
 
