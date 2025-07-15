@@ -3,26 +3,42 @@ let svg, simulation, link, node, text;
 let showNames = true;
 let width = 1200;
 let height = 600;
+let color;
 
-// Color scale for different groups representing Ajahs and factions
-const color = d3.scaleOrdinal()
-    .domain([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
-    .range([
-        "#ff6b6b",  // Group 1: Two Rivers/Main Characters (Red)
-        "#4169E1",  // Group 2: Blue Ajah (Royal Blue)
-        "#45b7d1",  // Group 3: Gleemen (Light Blue)
-        "#2F4F4F",  // Group 4: Warders (Dark Slate Gray)
-        "#bb8fce",  // Group 5: Aiel (Purple)
-        "#8B4513",  // Group 6: Brown Ajah (Saddle Brown)
-        "#228B22",  // Group 7: Green Ajah (Forest Green)
-        "#DC143C",  // Group 8: Red Ajah (Crimson)
-        "#FFD700",  // Group 9: Amyrlin Seat (Gold)
-        "#000000",  // Group 10: Forsaken (Black)
-        "#8B4513"   // Group 11: Bela (Brown - she's a horse!)
-    ]);
+document.addEventListener('DOMContentLoaded', function() {
+    
+    // Ensure D3 is loaded
+    if (typeof d3 === 'undefined') {
+        console.error('D3 is not loaded');
+        return;
+    }
+
+    
+    // Color scale for different groups representing Ajahs and factions
+    color = d3.scaleOrdinal()
+        .domain([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
+        .range([
+            "#ff6b6b",  // Group 1: Two Rivers/Main Characters (Red)
+            "#4169E1",  // Group 2: Blue Ajah (Royal Blue)
+            "#45b7d1",  // Group 3: Gleemen (Light Blue)
+            "#2F4F4F",  // Group 4: Warders (Dark Slate Gray)
+            "#bb8fce",  // Group 5: Aiel (Purple)
+            "#8B4513",  // Group 6: Brown Ajah (Saddle Brown)
+            "#228B22",  // Group 7: Green Ajah (Forest Green)
+            "#DC143C",  // Group 8: Red Ajah (Crimson)
+            "#FFD700",  // Group 9: Amyrlin Seat (Gold)
+            "#000000",  // Group 10: Forsaken (Black)
+            "#8B4513"   // Group 11: Bela (Brown - she's a horse!)
+        ]);
+
+    init();
+});
+
+
 
 // Load data and initialize graph
 async function init() {
+    
     try {
         const data = await d3.json("./data/main.json");
         createForceGraph(data);
@@ -43,6 +59,13 @@ function createForceGraph(data) {
         .style("max-width", "100%")
         .style("height", "auto");
     
+    // Create force simulation
+    simulation = d3.forceSimulation(data.nodes)
+        .force("link", d3.forceLink(data.links).id(d => d.id).distance(120))
+        .force("charge", d3.forceManyBody().strength(-300))
+        .force("center", d3.forceCenter(width / 2, height / 2))
+        .force("collision", d3.forceCollide().radius(20));
+    
     // Add zoom behavior
     const zoom = d3.zoom()
         .scaleExtent([0.1, 4])
@@ -62,27 +85,42 @@ function createForceGraph(data) {
         .selectAll("line")
         .data(data.links)
         .join("line")
-        .attr("stroke-width", d => Math.sqrt(d.value) * 2)
-        .style("opacity", 0.7);
+        .attr("stroke-width", d => Math.sqrt(d.value) * 2);
     
     // Create nodes
     node = container.append("g")
         .attr("stroke", "#fff")
-        .attr("stroke-width", 2)
+        .attr("stroke-width", 1.5)
         .selectAll("circle")
         .data(data.nodes)
         .join("circle")
         .attr("r", 12)
         .attr("fill", d => color(d.group))
         .style("cursor", "pointer")
-        .call(drag());
+        .on("mouseover", function(event, d) {
+            d3.select(this)
+                .transition()
+                .duration(200)
+                .attr("r", 18);
+            showTooltip(event, d);
+        })
+        .on("mouseout", function(event, d) {
+            d3.select(this)
+                .transition()
+                .duration(200)
+                .attr("r", 12);
+            hideTooltip();
+        })
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
     
-    // Add text labels
+    // Create text labels
     text = container.append("g")
         .selectAll("text")
         .data(data.nodes)
         .join("text")
-        .text(d => d.name)
         .attr("font-size", "12px")
         .attr("font-family", "Arial, sans-serif")
         .attr("text-anchor", "middle")
@@ -90,46 +128,10 @@ function createForceGraph(data) {
         .attr("fill", "#333")
         .style("pointer-events", "none")
         .style("font-weight", "bold")
-        .style("text-shadow", "1px 1px 2px rgba(255,255,255,0.8)");
+        .style("text-shadow", "1px 1px 2px rgba(255,255,255,0.8)")
+        .text(d => showNames ? d.name : "");
     
-    // Add hover effects
-    node.on("mouseover", function(event, d) {
-        d3.select(this)
-            .transition()
-            .duration(200)
-            .attr("r", 16)
-            .attr("stroke-width", 3);
-        
-        // Highlight connected links
-        link.style("opacity", l => 
-            (l.source === d || l.target === d) ? 1 : 0.2
-        );
-        
-        // Show tooltip
-        showTooltip(event, d);
-    })
-    .on("mouseout", function(event, d) {
-        d3.select(this)
-            .transition()
-            .duration(200)
-            .attr("r", 12)
-            .attr("stroke-width", 2);
-        
-        // Reset link opacity
-        link.style("opacity", 0.7);
-        
-        // Hide tooltip
-        hideTooltip();
-    });
-    
-    // Create force simulation
-    simulation = d3.forceSimulation(data.nodes)
-        .force("link", d3.forceLink(data.links).id(d => d.id).distance(80))
-        .force("charge", d3.forceManyBody().strength(-300))
-        .force("center", d3.forceCenter(width / 2, height / 2))
-        .force("collision", d3.forceCollide().radius(20));
-    
-    // Update positions on each tick
+    // Update positions on each simulation tick
     simulation.on("tick", () => {
         link
             .attr("x1", d => d.source.x)
@@ -147,29 +149,22 @@ function createForceGraph(data) {
     });
 }
 
-// Drag behavior
-function drag() {
-    function dragstarted(event, d) {
-        if (!event.active) simulation.alphaTarget(0.3).restart();
-        d.fx = d.x;
-        d.fy = d.y;
-    }
-    
-    function dragged(event, d) {
-        d.fx = event.x;
-        d.fy = event.y;
-    }
-    
-    function dragended(event, d) {
-        if (!event.active) simulation.alphaTarget(0);
-        d.fx = null;
-        d.fy = null;
-    }
-    
-    return d3.drag()
-        .on("start", dragstarted)
-        .on("drag", dragged)
-        .on("end", dragended);
+// Drag functions
+function dragstarted(event, d) {
+    if (!event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+}
+
+function dragged(event, d) {
+    d.fx = event.x;
+    d.fy = event.y;
+}
+
+function dragended(event, d) {
+    if (!event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
 }
 
 // Tooltip functions
@@ -212,17 +207,18 @@ window.restartSimulation = function() {
 
 window.toggleNames = function() {
     showNames = !showNames;
-    text.style("display", showNames ? "block" : "none");
+    text.text(d => showNames ? d.name : "");
 };
 
 window.centerGraph = function() {
-    svg.transition()
-        .duration(750)
-        .call(
-            d3.zoom().transform,
-            d3.zoomIdentity.translate(0, 0).scale(1)
-        );
+    // Reset zoom
+    svg.transition().duration(750).call(
+        d3.zoom().transform,
+        d3.zoomIdentity
+    );
 };
 
-// Initialize the graph when the page loads
-init();
+window.toggleAutoRotation = function() {
+    // This function is kept for UI consistency but doesn't do anything in 2D mode
+    console.log("Auto-rotation is not available in 2D mode");
+};

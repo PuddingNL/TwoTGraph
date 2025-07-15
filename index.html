@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&display=swap" rel="stylesheet">
     <title>Wheel of Time Character Network</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -62,10 +65,19 @@
                     <span>Bela</span>
                 </div>
             </div>
+            
+            <div class="instructions">
+                <h4>Controls</h4>
+                <p><strong>Mouse drag:</strong> Pan the view</p>
+                <p><strong>Mouse wheel:</strong> Zoom in/out</p>
+                <p><strong>Drag nodes:</strong> Move characters around</p>
+                <p><strong>Hover:</strong> See character details</p>
+            </div>
         </div>
     </div>
 
     <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/d3-3d@version/build/d3-3d.js"></script>
     <script src="index.js"></script>
 </body>
 </html>
