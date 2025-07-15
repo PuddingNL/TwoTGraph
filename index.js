@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
             "#ff6b6b",  // Group 1: Two Rivers/Main Characters (Red)
             "#4169E1",  // Group 2: Blue Ajah (Royal Blue)
             "#45b7d1",  // Group 3: Gleemen (Light Blue)
-            "#2F4F4F",  // Group 4: Warders (Dark Slate Gray)
+            "#98FF98",  // Group 4: Warders (Mint Green)
             "#bb8fce",  // Group 5: Aiel (Purple)
             "#8B4513",  // Group 6: Brown Ajah (Saddle Brown)
             "#228B22",  // Group 7: Green Ajah (Forest Green)
@@ -30,6 +30,16 @@ document.addEventListener('DOMContentLoaded', function() {
             "#000000",  // Group 10: Forsaken (Black)
             "#8B4513"   // Group 11: Bela (Brown - she's a horse!)
         ]);
+
+    // Connect the checkbox to toggle status visibility
+    const statusToggle = document.getElementById('statusToggle');
+    if (statusToggle) {
+        statusToggle.addEventListener('change', () => {
+            window.showStatus = statusToggle.checked;
+        });
+    }
+
+    window.showStatus = false; // Default to showing status
 
     init();
 });
@@ -179,11 +189,12 @@ function showTooltip(event, d) {
         .style("font-size", "12px")
         .style("pointer-events", "none")
         .style("opacity", 0);
-    
+
     tooltip.html(`
         <strong>${d.name}</strong><br>
-        ID: ${d.id}<br>
-        Group: ${d.group}
+        Alignment: ${d.alignment}<br>
+        Description: ${d.description}<br>
+        ${window.showStatus ? `Status: ${d.status}<br>` : ''}
     `)
     .style("left", (event.pageX + 10) + "px")
     .style("top", (event.pageY - 10) + "px")
