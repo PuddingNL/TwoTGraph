@@ -1,0 +1,20 @@
+{
+  "name": "twotgraph",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "http-server -p 8080 -c-1",
+    "start": "http-server -p 8080",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "D3.js Force Graph Visualization",
+  "dependencies": {
+    "d3": "^7.9.0"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}
