@@ -1,10 +1,9 @@
 body {
     margin: 0;
     padding: 20px;
-    /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
     font-family: "Merriweather", serif;
     background: linear-gradient(135deg, #bcddd3 0%, #62958e 100%);
-    min-height: 100vh;
+    /* min-height: 100vh; */
 }
 
 .container {

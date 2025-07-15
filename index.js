@@ -108,18 +108,15 @@ function createForceGraph(data) {
         .attr("fill", d => color(d.group))
         .style("cursor", "pointer")
         .on("mouseover", function(event, d) {
-            d3.select(this)
-                .transition()
-                .duration(200)
-                .attr("r", 18);
             showTooltip(event, d);
         })
         .on("mouseout", function(event, d) {
-            d3.select(this)
-                .transition()
-                .duration(200)
-                .attr("r", 12);
-            hideTooltip();
+            const tooltip = d3.select(".tooltip");
+            setTimeout(() => {
+                if (!tooltip.empty() && !tooltip.node().matches(":hover")) {
+                    hideTooltip();
+                }
+            }, 100); // Reduce delay for better responsiveness
         })
         .call(d3.drag()
             .on("start", dragstarted)
@@ -179,22 +176,28 @@ function dragended(event, d) {
 
 // Tooltip functions
 function showTooltip(event, d) {
-    const tooltip = d3.select("body").append("div")
-        .attr("class", "tooltip")
-        .style("position", "absolute")
-        .style("background", "rgba(0,0,0,0.8)")
-        .style("color", "white")
-        .style("padding", "10px")
-        .style("border-radius", "5px")
-        .style("font-size", "12px")
-        .style("pointer-events", "none")
-        .style("opacity", 0);
+    let tooltip = d3.select(".tooltip");
+
+    // Check if tooltip already exists
+    if (tooltip.empty()) {
+        tooltip = d3.select("body").append("div")
+            .attr("class", "tooltip")
+            .style("position", "absolute")
+            .style("background", "rgba(0,0,0,0.8)")
+            .style("color", "white")
+            .style("padding", "10px")
+            .style("border-radius", "5px")
+            .style("font-size", "12px")
+            .style("pointer-events", "auto") // Enable pointer events
+            .style("opacity", 0);
+    }
 
     tooltip.html(`
         <strong>${d.name}</strong><br>
         Alignment: ${d.alignment}<br>
         Description: ${d.description}<br>
         ${window.showStatus ? `Status: ${d.status}<br>` : ''}
+        <a href="https://wot.fandom.com/wiki/${encodeURIComponent(d.name)}" target="_blank" style="color: #fff; text-decoration: underline;">Learn more</a>
     `)
     .style("left", (event.pageX + 10) + "px")
     .style("top", (event.pageY - 10) + "px")
