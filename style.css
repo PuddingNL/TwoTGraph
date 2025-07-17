@@ -86,6 +86,11 @@ body {
     margin-bottom: 8px;
 }
 
+.legend-item span:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 .legend-color {
     width: 12px;
     height: 12px;

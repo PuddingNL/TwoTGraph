@@ -236,3 +236,29 @@ window.toggleAutoRotation = function() {
     // This function is kept for UI consistency but doesn't do anything in 2D mode
     console.log("Auto-rotation is not available in 2D mode");
 };
+
+// Add legend click functionality
+function addLegendInteraction() {
+    const legendItems = d3.selectAll(".legend-item"); // Assuming legend items have this class
+
+    let activeGroup = null; // Track the currently active group
+
+    legendItems.on("click", function(event, d) {
+        const group = d3.select(this).attr("data-group"); // Assuming data-group attribute exists
+
+        if (activeGroup === group) {
+            // Reset view if the same group is clicked again
+            activeGroup = null;
+            node.style("opacity", 1);
+            link.style("opacity", 1);
+        } else {
+            // Highlight nodes and links of the selected group
+            activeGroup = group;
+            node.style("opacity", d => d.group == group ? 1 : 0.2);
+            link.style("opacity", l => l.source.group == group || l.target.group == group ? 1 : 0.2);
+        }
+    });
+}
+
+// Call the legend interaction function after creating the graph
+addLegendInteraction();
