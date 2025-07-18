@@ -4,16 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>D3 Test</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="test"></div>
     
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script>
-        console.log('D3 type:', typeof d3);
-        console.log('D3 version:', d3.version);
-        console.log('scaleOrdinal type:', typeof d3.scaleOrdinal);
-        
         if (typeof d3.scaleOrdinal === 'function') {
             const color = d3.scaleOrdinal()
                 .domain([1, 2, 3])

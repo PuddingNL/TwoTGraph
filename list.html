@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character List</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .search-container {
+            margin-bottom: 20px;
+        }
+        .group {
+            margin-top: 20px;
+        }
+        .group h2 {
+            margin-bottom: 10px;
+        }
+        .character {
+            cursor: pointer;
+            color: blue;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>The Wheel of Time - Character List</h1>
+            <sup><a href="/index.html">Character Visualization</a></sup>
+        </div>
+    <div class="search-container">
+        <label for="search">Search:</label>
+        <input type="text" id="search" placeholder="Search characters...">
+    </div>
+
+    <div id="character-list">
+        <!-- Groups and characters will be dynamically populated here -->
+    </div>
+
+    <dialog id="character-dialog">
+        <h2 id="dialog-name">Character Details</h2>
+        <p><strong>Group:</strong> <span id="dialog-group"></span></p>
+        <p><strong>Alignment:</strong> <span id="dialog-alignment"></span></p>
+        <p><strong>Description:</strong> <span id="dialog-description"></span></p>
+        <button id="close-dialog">Close</button>
+    </dialog>
+
+    <script>
+        const characterList = document.getElementById('character-list');
+        const searchInput = document.getElementById('search');
+        const dialog = document.getElementById('character-dialog');
+        const dialogName = document.getElementById('dialog-name');
+        const dialogGroup = document.getElementById('dialog-group');
+        const dialogAlignment = document.getElementById('dialog-alignment');
+        const dialogDescription = document.getElementById('dialog-description');
+        const closeDialog = document.getElementById('close-dialog');
+
+        fetch('./data/main.json')
+            .then(response => response.json())
+            .then(data => {
+                console.log('Fetched data:', data); // Debugging step to log the fetched data
+                const characters = Array.isArray(data.nodes) ? data.nodes : []; // Use the nodes array from the fetched data
+
+                function groupCharacters() {
+                    const groups = {};
+                    characters.forEach(character => {
+                        if (!groups[character.group]) {
+                            groups[character.group] = [];
+                        }
+                        groups[character.group].push(character);
+                    });
+                    return groups;
+                }
+
+                function renderCharacters() {
+                    const groups = groupCharacters();
+                    characterList.innerHTML = '';
+
+                    Object.keys(groups).forEach(group => {
+                        const groupDiv = document.createElement('div');
+                        groupDiv.classList.add('group');
+
+                        const groupTitle = document.createElement('h2');
+                        groupTitle.textContent = `Group ${group}`;
+                        groupDiv.appendChild(groupTitle);
+
+                        groups[group].forEach(character => {
+                            const characterDiv = document.createElement('div');
+                            characterDiv.classList.add('character');
+                            characterDiv.textContent = character.name;
+                            characterDiv.addEventListener('click', () => openDialog(character));
+                            groupDiv.appendChild(characterDiv);
+                        });
+
+                        characterList.appendChild(groupDiv);
+                    });
+                }
+
+                function openDialog(character) {
+                    dialogName.textContent = character.name;
+                    dialogGroup.textContent = character.group;
+                    dialogAlignment.textContent = character.alignment;
+                    dialogDescription.textContent = character.description;
+                    dialog.showModal();
+                }
+
+                function filterCharacters() {
+                    const searchTerm = searchInput.value.toLowerCase();
+                    const filteredCharacters = characters.filter(character =>
+                        character.name.toLowerCase().includes(searchTerm)
+                    );
+                    renderFilteredCharacters(filteredCharacters);
+                }
+
+                function renderFilteredCharacters(filteredCharacters) {
+                    const groups = {};
+                    filteredCharacters.forEach(character => {
+                        if (!groups[character.group]) {
+                            groups[character.group] = [];
+                        }
+                        groups[character.group].push(character);
+                    });
+
+                    characterList.innerHTML = '';
+
+                    Object.keys(groups).forEach(group => {
+                        const groupDiv = document.createElement('div');
+                        groupDiv.classList.add('group');
+
+                        const groupTitle = document.createElement('h2');
+                        groupTitle.textContent = `Group ${group}`;
+                        groupDiv.appendChild(groupTitle);
+
+                        groups[group].forEach(character => {
+                            const characterDiv = document.createElement('div');
+                            characterDiv.classList.add('character');
+                            characterDiv.textContent = character.name;
+                            characterDiv.addEventListener('click', () => openDialog(character));
+                            groupDiv.appendChild(characterDiv);
+                        });
+
+                        characterList.appendChild(groupDiv);
+                    });
+                }
+
+                searchInput.addEventListener('input', filterCharacters);
+                closeDialog.addEventListener('click', () => dialog.close());
+
+                renderCharacters();
+            })
+            .catch(error => console.error('Error loading characters:', error));
+    </script>
+    </div>
+</body>
+</html>
