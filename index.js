@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Color scale for different groups representing Ajahs and factions
     color = d3.scaleOrdinal()
-        .domain([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
+        .domain([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13])
         .range([
             "#ff6b6b",  // Group 1: Two Rivers/Main Characters (Red)
             "#4169E1",  // Group 2: Blue Ajah (Royal Blue)
@@ -28,7 +28,9 @@ document.addEventListener('DOMContentLoaded', function() {
             "#DC143C",  // Group 8: Red Ajah (Crimson)
             "#FFD700",  // Group 9: Amyrlin Seat (Gold)
             "#000000",  // Group 10: Forsaken (Black)
-            "#8B4513"   // Group 11: Bela (Brown - she's a horse!)
+            "#8B4513",  // Group 11: Bela (Brown - she's a horse!)
+            "#FFD700",  // Group 12: Grey Ajah (Gold)
+            "#808080"   // Group 13: Grey Ajah (Grey)
         ]);
 
     // Connect the checkbox to toggle status visibility
