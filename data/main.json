@@ -94,7 +94,12 @@
     {"id": "Erian", "name": "Erian Boroleos", "group": 7, "alignment": "Good", "description": "A Green Ajah Aes Sedai bonded to multiple Warders.", "status": "Alive"},
     {"id": "Merise", "name": "Merise Haindehl", "group": 7, "alignment": "Good", "description": "A Green Ajah Aes Sedai bonded to Jahar Narishma.", "status": "Alive"},
     {"id": "Teslyn", "name": "Teslyn Baradon", "group": 8, "alignment": "Good", "description": "A Red Ajah Aes Sedai who aids Mat.", "status": "Alive"},
-    {"id": "Joline", "name": "Joline Maza", "group": 8, "alignment": "Good", "description": "A Red Ajah Aes Sedai involved with Mat.", "status": "Alive"}
+    {"id": "Joline", "name": "Joline Maza", "group": 8, "alignment": "Good", "description": "A Red Ajah Aes Sedai involved with Mat.", "status": "Alive"},
+    {"id": "MazrimTaim", "name": "Mazrim Taim", "group": 10, "alignment": "Evil", "description": "A false Dragon and leader of the Black Tower.", "status": "Alive"},
+    {"id": "ArelMalevin", "name": "Arel Malevin", "group": 10, "alignment": "Good", "description": "An Asha'man loyal to Rand.", "status": "Alive"},
+    {"id": "JaichimCarridin", "name": "Jaichim Carridin", "group": 10, "alignment": "Evil", "description": "A Darkfriend and Whitecloak officer.", "status": "Dead"},
+    {"id": "MiliSkane", "name": "Mili Skane", "group": 10, "alignment": "Evil", "description": "A Darkfriend involved in various plots.", "status": "Alive"},
+    {"id": "ArturHawkwing", "name": "Artur Hawkwing", "group": 1, "alignment": "Good", "description": "A legendary ruler and unifier of nations.", "status": "Dead"}
   ],
   "links": [
     {"source": "Rand", "target": "Perrin", "value": 3},
